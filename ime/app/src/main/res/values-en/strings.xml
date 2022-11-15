@@ -48,6 +48,8 @@
     <string name="hint_add_to_dictionary">\u2190 Touch again to save</string>
     <string name="hint_double_tap_to_close">Again to remove suggestions</string>
 
+    <string name="hint_click_for_inline_suggestions">Available auto-fill suggestions</string>
+
     <!-- voice -->
     <string name="voice_input_not_installed_title">Voice Is Not Installed</string>
     <string name="voice_input_not_installed_text">Voice Input is not installed on your device.\nThat
@@ -952,8 +954,7 @@
     <string name="click_me_for_easter_egg_info">click me for a surprise</string>
     <string name="backup_restore_not_support_before_kitkat">Not supported on your Android</string>
     <string name="backup_restore_not_support_before_kitkat_message">Backup and restore are not supported for devices running Android OS prior to KitKat (version 4.4). Sorry.</string>
-    <!-- this URL should be localized - it should point to a web-site with information in the locale language. -->
-    
+    <string name="delete_all_clipboard_entries">Empty clipboard</string>
 
-
+    <string name="tip_swipe_from_backspace_to_clear">Tip: you can swipe-left from the backspace to clear the word!</string>
 </resources>

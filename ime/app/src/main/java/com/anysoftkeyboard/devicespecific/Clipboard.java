@@ -32,5 +32,7 @@ public interface Clipboard {
 
     void deleteEntry(int entryIndex);
 
+    void deleteAllEntries();
+
     void setClipboardUpdatedListener(@Nullable ClipboardUpdatedListener listener);
 }

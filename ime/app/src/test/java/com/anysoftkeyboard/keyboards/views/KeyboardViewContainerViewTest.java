@@ -5,9 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
 import androidx.test.core.app.ApplicationProvider;
 import com.anysoftkeyboard.AnySoftKeyboardRobolectricTestRunner;
 import com.anysoftkeyboard.ime.InputViewBinder;
@@ -38,10 +38,9 @@ public class KeyboardViewContainerViewTest {
 
     @Test
     public void testDefaultInflation() {
-        Assert.assertEquals(3, mUnderTest.getChildCount());
-        Assert.assertTrue(mUnderTest.getChildAt(0) instanceof HorizontalScrollView);
-        Assert.assertTrue(mUnderTest.getChildAt(1) instanceof CandidateView);
-        Assert.assertTrue(mUnderTest.getChildAt(2) instanceof AnyKeyboardView);
+        Assert.assertEquals(2, mUnderTest.getChildCount());
+        Assert.assertTrue(mUnderTest.getChildAt(0) instanceof CandidateView);
+        Assert.assertTrue(mUnderTest.getChildAt(1) instanceof AnyKeyboardView);
     }
 
     @Test
@@ -49,8 +48,8 @@ public class KeyboardViewContainerViewTest {
         AnyKeyboardView mock = Mockito.mock(AnyKeyboardView.class);
         mUnderTest.addView(mock);
 
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(mock, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(mock, mUnderTest.getChildAt(2));
 
         Mockito.verify(mock, Mockito.never()).setKeyboardTheme(any());
         Mockito.verify(mock, Mockito.never()).setThemeOverlay(any());
@@ -64,8 +63,8 @@ public class KeyboardViewContainerViewTest {
         AnyKeyboardView mock = Mockito.mock(AnyKeyboardView.class);
         mUnderTest.addView(mock);
 
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(mock, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(mock, mUnderTest.getChildAt(2));
 
         Mockito.verify(mock).setKeyboardTheme(any());
         Mockito.verify(mock).setThemeOverlay(any());
@@ -162,12 +161,12 @@ public class KeyboardViewContainerViewTest {
 
         Mockito.verify(provider).inflateActionView(mUnderTest);
         Mockito.verify(provider, Mockito.never()).onRemoved();
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(view, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(view, mUnderTest.getChildAt(2));
 
         mUnderTest.removeStripAction(provider);
         Mockito.verify(provider).onRemoved();
-        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertEquals(2, mUnderTest.getChildCount());
     }
 
     @Test
@@ -182,13 +181,13 @@ public class KeyboardViewContainerViewTest {
         Mockito.doReturn(viewHigh).when(providerHigh).inflateActionView(any());
 
         mUnderTest.addStripAction(provider, false);
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(view, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(view, mUnderTest.getChildAt(2));
 
         mUnderTest.addStripAction(providerHigh, true);
-        Assert.assertEquals(5, mUnderTest.getChildCount());
-        Assert.assertSame(viewHigh, mUnderTest.getChildAt(3));
-        Assert.assertSame(view, mUnderTest.getChildAt(4));
+        Assert.assertEquals(4, mUnderTest.getChildCount());
+        Assert.assertSame(viewHigh, mUnderTest.getChildAt(2));
+        Assert.assertSame(view, mUnderTest.getChildAt(3));
     }
 
     @Test
@@ -203,13 +202,13 @@ public class KeyboardViewContainerViewTest {
         Mockito.doReturn(viewHigh).when(providerHigh).inflateActionView(any());
 
         mUnderTest.addStripAction(providerHigh, true);
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(viewHigh, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(viewHigh, mUnderTest.getChildAt(2));
 
         mUnderTest.addStripAction(provider, false);
-        Assert.assertEquals(5, mUnderTest.getChildCount());
-        Assert.assertSame(viewHigh, mUnderTest.getChildAt(3));
-        Assert.assertSame(view, mUnderTest.getChildAt(4));
+        Assert.assertEquals(4, mUnderTest.getChildCount());
+        Assert.assertSame(viewHigh, mUnderTest.getChildAt(2));
+        Assert.assertSame(view, mUnderTest.getChildAt(3));
     }
 
     @Test
@@ -224,13 +223,13 @@ public class KeyboardViewContainerViewTest {
         Mockito.doReturn(view2).when(provider2).inflateActionView(any());
 
         mUnderTest.addStripAction(provider, true);
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(view, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(view, mUnderTest.getChildAt(2));
 
         mUnderTest.addStripAction(provider2, true);
-        Assert.assertEquals(5, mUnderTest.getChildCount());
-        Assert.assertSame(view2, mUnderTest.getChildAt(3));
-        Assert.assertSame(view, mUnderTest.getChildAt(4));
+        Assert.assertEquals(4, mUnderTest.getChildCount());
+        Assert.assertSame(view2, mUnderTest.getChildAt(2));
+        Assert.assertSame(view, mUnderTest.getChildAt(3));
     }
 
     @Test
@@ -313,8 +312,8 @@ public class KeyboardViewContainerViewTest {
 
         Mockito.verify(provider).inflateActionView(mUnderTest);
         Mockito.verify(provider, Mockito.never()).onRemoved();
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(view, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(view, mUnderTest.getChildAt(2));
     }
 
     @Test(expected = IllegalStateException.class)
@@ -344,8 +343,8 @@ public class KeyboardViewContainerViewTest {
         mUnderTest.addStripAction(provider, false);
         mUnderTest.setActionsStripVisibility(true);
         mUnderTest.setActionsStripVisibility(true);
-        Assert.assertEquals(4, mUnderTest.getChildCount());
-        Assert.assertSame(view, mUnderTest.getChildAt(3));
+        Assert.assertEquals(3, mUnderTest.getChildCount());
+        Assert.assertSame(view, mUnderTest.getChildAt(2));
         Assert.assertSame(mUnderTest, view.getParent());
     }
 
@@ -367,5 +366,38 @@ public class KeyboardViewContainerViewTest {
 
         Assert.assertEquals(1024, mUnderTest.getMeasuredWidth());
         Assert.assertEquals(1024, mUnderTest.getMeasuredHeight());
+    }
+
+    @Test
+    public void testOffsetTouchesToMainKeyboard() {
+        mUnderTest.onMeasure(
+                View.MeasureSpec.makeMeasureSpec(1024, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(1024, View.MeasureSpec.AT_MOST));
+        mUnderTest.onLayout(false, 0, 0, 1024, 1024);
+
+        final float candidateY =
+                mUnderTest.getResources().getDimension(R.dimen.candidate_strip_height);
+        final float midX = mUnderTest.getWidth() / 2f;
+
+        // inside the keyboard
+        MotionEvent e =
+                MotionEvent.obtain(10, 10, MotionEvent.ACTION_DOWN, midX, 2f * candidateY, 0);
+        Assert.assertFalse(mUnderTest.onInterceptTouchEvent(e));
+        Assert.assertEquals(midX, e.getX(), 0.01f);
+        Assert.assertEquals(2f * candidateY, e.getY(), 0.01f);
+
+        // way above the keyboard
+        e = MotionEvent.obtain(10, 10, MotionEvent.ACTION_DOWN, midX, candidateY / 2f, 0);
+        Assert.assertFalse(mUnderTest.onInterceptTouchEvent(e));
+        Assert.assertEquals(midX, e.getX(), 0.01f);
+        // not being offset
+        Assert.assertEquals(candidateY / 2f, e.getY(), 0.01f);
+
+        // a bit above the keyboard
+        e = MotionEvent.obtain(10, 10, MotionEvent.ACTION_DOWN, midX, candidateY * 0.8f, 0);
+        Assert.assertFalse(mUnderTest.onInterceptTouchEvent(e));
+        Assert.assertEquals(midX, e.getX(), 0.01f);
+        // being offset
+        Assert.assertEquals(candidateY + 1f, e.getY(), 0.01f);
     }
 }

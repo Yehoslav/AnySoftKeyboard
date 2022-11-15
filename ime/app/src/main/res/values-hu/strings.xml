@@ -38,6 +38,7 @@
     </string>
     <string name="hint_add_to_dictionary">\u2190 A mentéshez érintse meg újra</string>
     <string name="hint_double_tap_to_close">Nyomd meg újra a javaslatok eltávolításához</string>
+    <string name="hint_click_for_inline_suggestions">Elérhető automatikus kitöltési javaslatok</string>
     <!-- voice -->
     <string name="voice_input_not_installed_title">Nincs telepítve hangfelismerő alkalmazás</string>
     <string name="voice_input_not_installed_text">Hangfelismerő nincs telepítve a készüléken.\nEz könnyen orvosolható: telepítse most az alkalmazásboltból.</string>
@@ -747,5 +748,5 @@
     <string name="click_me_for_easter_egg_info">Kattintson egy meglepetéshez</string>
     <string name="backup_restore_not_support_before_kitkat">Nem támogatott ezen az Android verzión</string>
     <string name="backup_restore_not_support_before_kitkat_message">A biztonsági mentés és visszaállítás nem támogatott a KitKat (4.4-es verzió) előtti Android operációs rendszert futtató eszközökön. Sajnálom.</string>
-    <!-- this URL should be localized - it should point to a web-site with information in the locale language. -->
+    <string name="delete_all_clipboard_entries">Vágólap törlése</string>
 </resources>

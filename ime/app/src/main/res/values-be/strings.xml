@@ -655,6 +655,7 @@
     <string name="gesture_typing_alert_title">Функцыя знаходзіцца ў рэжыме BETA!</string>
     <string name="gesture_typing_alert_message">Функцыя ўвода жэстамі➿ знаходзіцца на стадыі <b>beta</b>-тэсціравання і можа працаваць нестабільна.\nАле пры жаданні вы можаце паспрабаваць яе.</string>
     <string name="gesture_typing_alert_button">Зразумела</string>
+    <string name="undo_gesture_typing">Адрабіць друк жэстамі</string>
     <string name="apply_remote_app_colors_to_theme">Змяніць колеры тэмы ў адпаведнасці з бягучай праграмай</string>
     <string name="apply_overlay_summary_on">Колеры клавіятуры будуць адпавядаць актыўнай праграме (калі магчыма).</string>
     <string name="apply_overlay_summary_off">Заўсёды выкарыстоўваць колеры тэмы.</string>
@@ -669,5 +670,4 @@
     <string name="click_me_for_easter_egg_info">націсні на мяне для сюрпрызу</string>
     <string name="backup_restore_not_support_before_kitkat">Не падтрымліваецца ў вашай версіі Android</string>
     <string name="backup_restore_not_support_before_kitkat_message">Рэзервовая копія і аднаўленне не падтрымліваюцца для прылад з аперацыйнай сістэмай Android версіі ранейшай за KitKat (версія 4.4). Выбачаемся.</string>
-    <!-- this URL should be localized - it should point to a web-site with information in the locale language. -->
 </resources>
