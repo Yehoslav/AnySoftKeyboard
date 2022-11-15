@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.robolectric.annotation.Config;
 
@@ -155,6 +156,7 @@ public class AnySoftKeyboardGimmicksTest extends AnySoftKeyboardBaseTest {
         Assert.assertEquals(
                 "symbols_keyboard",
                 mAnySoftKeyboardUnderTest.getCurrentKeyboardForTests().getKeyboardId());
+        Assert.assertEquals(" 1", mAnySoftKeyboardUnderTest.getCurrentInputConnectionText());
         mAnySoftKeyboardUnderTest.simulateKeyPress(KeyCodes.SPACE);
         Assert.assertEquals(
                 "c7535083-4fe6-49dc-81aa-c5438a1a343a",
@@ -402,6 +404,26 @@ public class AnySoftKeyboardGimmicksTest extends AnySoftKeyboardBaseTest {
         Mockito.verify(inputConnection).commitText("\n", 1);
         // and never the key-events
         Mockito.verify(inputConnection, Mockito.never()).sendKeyEvent(Mockito.any(KeyEvent.class));
+    }
+
+    @Test
+    public void testShiftEnterSendsNewLine() {
+        TestInputConnection inputConnection = getCurrentTestInputConnection();
+        mAnySoftKeyboardUnderTest.simulateTextTyping("this is a test");
+        mAnySoftKeyboardUnderTest.onPress(KeyCodes.SHIFT);
+        mAnySoftKeyboardUnderTest.simulateKeyPress(KeyCodes.ENTER);
+        mAnySoftKeyboardUnderTest.simulateTextTyping("this is a test\n");
+        InOrder inOrder = Mockito.inOrder(inputConnection);
+        inOrder.verify(inputConnection).beginBatchEdit();
+        inOrder.verify(inputConnection).commitText("this", 1);
+        inOrder.verify(inputConnection).commitText("is", 1);
+        inOrder.verify(inputConnection).commitText("a", 1);
+        // test is not committed, it is just done composing.
+        inOrder.verify(inputConnection, Mockito.never())
+                .commitText(Mockito.eq("test"), Mockito.anyInt());
+        inOrder.verify(inputConnection).finishComposingText();
+        inOrder.verify(inputConnection).commitText("\n", 1);
+        inOrder.verify(inputConnection).endBatchEdit();
     }
 
     @Test
