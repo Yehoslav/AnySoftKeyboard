@@ -17,10 +17,8 @@
 package com.anysoftkeyboard.dictionaries;
 
 import android.text.TextUtils;
-import com.anysoftkeyboard.api.KeyCodes;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,10 +28,6 @@ public class WordComposer implements KeyCodesProvider {
     public static final int NOT_A_KEY_INDEX = -1;
     public static final char START_TAGS_SEARCH_CHARACTER = ':';
 
-    private static final int MAX_POSSIBLE_SUB_WORDS = 2;
-    private final ArrayList<SimpleKeysProvider> mPossibleSubWordsWorkSpace = new ArrayList<>();
-    private final ArrayList<SimpleKeysProvider> mPossibleSubWordsReturn = new ArrayList<>();
-    private static final int[] EMPTY_CODES_ARRAY = new int[0];
     /** The list of unicode values for each keystroke (including surrounding keys) */
     private final ArrayList<int[]> mCodes = new ArrayList<>(Dictionary.MAX_WORD_LENGTH);
 
@@ -43,6 +37,11 @@ public class WordComposer implements KeyCodesProvider {
     /** The word chosen from the candidate list, until it is committed. */
     private CharSequence mPreferredWord;
 
+    /**
+     * Holds the typed word as it appears in the input. Note: the length of this may be different
+     * than the size of mCodes! But, the code-point length of this is the same as the size of
+     * mCodes.
+     */
     private final StringBuilder mTypedWord = new StringBuilder(Dictionary.MAX_WORD_LENGTH);
 
     private int mCursorPosition;
@@ -54,10 +53,7 @@ public class WordComposer implements KeyCodesProvider {
     /** Whether the user chose to capitalize the first char of the word. */
     private boolean mIsFirstCharCapitalized;
 
-    public WordComposer() {
-        while (mPossibleSubWordsWorkSpace.size() <= MAX_POSSIBLE_SUB_WORDS)
-            mPossibleSubWordsWorkSpace.add(new SimpleKeysProvider());
-    }
+    public WordComposer() {}
 
     public void cloneInto(WordComposer newWord) {
         newWord.reset();
@@ -85,48 +81,6 @@ public class WordComposer implements KeyCodesProvider {
         mTypedWord.setLength(0);
         mCapsCount = 0;
         mCursorPosition = 0;
-    }
-
-    /**
-     * Returns a list of words can be constructed from the typed word if a key was SPACE rather and
-     * a letter. Never returns this.
-     */
-    public List<? extends KeyCodesProvider> getPossibleSubWords() {
-        mPossibleSubWordsReturn.clear();
-        int providerIndex = 0;
-        SimpleKeysProvider keyCodesProvider = mPossibleSubWordsWorkSpace.get(providerIndex);
-        keyCodesProvider.reset();
-        // looking for keys which are close to SPACE
-        for (int keyIndex = 0; keyIndex < mCodes.size(); keyIndex++) {
-            final int[] nearByCodes = mCodes.get(keyIndex);
-            if (hasSpaceInCodes(nearByCodes)) {
-                if (keyCodesProvider.mCodes.size() > 0) {
-                    providerIndex++;
-                    if (providerIndex == MAX_POSSIBLE_SUB_WORDS) break;
-                    keyCodesProvider = mPossibleSubWordsWorkSpace.get(providerIndex);
-                    keyCodesProvider.reset();
-                }
-            } else {
-                keyCodesProvider.addTypedCode(
-                        mTypedWord.codePointAt(keyIndex), mCodes.get(keyIndex));
-                if (keyCodesProvider.mCodes.size() == 1) {
-                    mPossibleSubWordsReturn.add(keyCodesProvider);
-                }
-            }
-        }
-
-        if (keyCodesProvider.codePointCount() == codePointCount()) return Collections.emptyList();
-        return mPossibleSubWordsReturn;
-    }
-
-    private static boolean hasSpaceInCodes(int[] nearByCodes) {
-        if (nearByCodes.length > 0) {
-            // assuming the keycode at the end is SPACE.
-            // see
-            // com.anysoftkeyboard.keyboards.views.ProximityKeyDetector.getKeyIndexAndNearbyCodes
-            return nearByCodes[nearByCodes.length - 1] == KeyCodes.SPACE;
-        }
-        return false;
     }
 
     /**
@@ -168,7 +122,7 @@ public class WordComposer implements KeyCodesProvider {
         return mCodes.get(index);
     }
 
-    private static final int[] PRIMARY_CODE_CREATE = new int[1];
+    private static final char[] PRIMARY_CODE_CREATE = new char[4];
 
     /**
      * Add a new keystroke, with codes[0] containing the pressed key's unicode and the rest of the
@@ -177,31 +131,32 @@ public class WordComposer implements KeyCodesProvider {
      * @param codes the array of unicode values
      */
     public void add(int primaryCode, int[] codes) {
-        PRIMARY_CODE_CREATE[0] = primaryCode;
-        mTypedWord.insert(mCursorPosition, new String(PRIMARY_CODE_CREATE, 0, 1));
+        final var charCount = Character.toChars(primaryCode, PRIMARY_CODE_CREATE, 0);
+        mTypedWord.insert(mCursorPosition, PRIMARY_CODE_CREATE, 0, charCount);
 
         correctPrimaryJuxtapos(primaryCode, codes);
-        // this will return a copy of the codes array, stored in an array with sufficent storage
+        // this will return a copy of the codes array, stored in an array with sufficient storage
         int[] reusableArray = getReusableArray(codes);
         mCodes.add(mTypedWord.codePointCount(0, mCursorPosition), reusableArray);
-        mCursorPosition += Character.charCount(primaryCode);
+        mCursorPosition += charCount;
         if (Character.isUpperCase(primaryCode)) mCapsCount++;
     }
 
     public void simulateTypedWord(CharSequence typedWord) {
-        mCursorPosition -= charCount();
-
-        mTypedWord.setLength(0);
+        final var typedCodes = new int[1];
         mTypedWord.insert(mCursorPosition, typedWord);
 
         int index = 0;
         while (index < typedWord.length()) {
             final int codePoint = Character.codePointAt(typedWord, index);
-            mCodes.add(mCursorPosition, EMPTY_CODES_ARRAY);
+            typedCodes[0] = codePoint;
+            final var codesFromPool = getReusableArray(typedCodes);
+            mCodes.add(mTypedWord.codePointCount(0, mCursorPosition), codesFromPool);
             if (Character.isUpperCase(codePoint)) mCapsCount++;
-            index += Character.charCount(codePoint);
+            final var charCount = Character.charCount(codePoint);
+            index += charCount;
+            mCursorPosition += charCount;
         }
-        mCursorPosition += typedWord.length();
     }
 
     private int[] getReusableArray(int[] codes) {
@@ -265,7 +220,7 @@ public class WordComposer implements KeyCodesProvider {
         } else if (BuildConfig.DEBUG) {
             throw new IllegalStateException(
                     "mTypedWord is '"
-                            + mTypedWord.toString()
+                            + mTypedWord
                             + "' while asking to delete '"
                             + typedTextToDeleteAtEnd
                             + "'.");
@@ -401,35 +356,5 @@ public class WordComposer implements KeyCodesProvider {
 
     public boolean isEmpty() {
         return mCodes.isEmpty();
-    }
-
-    private static class SimpleKeysProvider implements KeyCodesProvider {
-        private final List<int[]> mCodes = new ArrayList<>(Dictionary.MAX_WORD_LENGTH);
-        private final StringBuilder mTypedWord = new StringBuilder();
-
-        @Override
-        public int codePointCount() {
-            return mCodes.size();
-        }
-
-        @Override
-        public int[] getCodesAt(int index) {
-            return mCodes.get(index);
-        }
-
-        @Override
-        public CharSequence getTypedWord() {
-            return mTypedWord;
-        }
-
-        void reset() {
-            mCodes.clear();
-            mTypedWord.setLength(0);
-        }
-
-        public void addTypedCode(int codePoint, int[] nearByCodes) {
-            mTypedWord.appendCodePoint(codePoint);
-            mCodes.add(nearByCodes);
-        }
     }
 }

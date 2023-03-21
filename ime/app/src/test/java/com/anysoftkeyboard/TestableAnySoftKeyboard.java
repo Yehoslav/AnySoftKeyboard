@@ -537,11 +537,12 @@ public class TestableAnySoftKeyboard extends SoftKeyboard {
                                                                 "bye".toCharArray(),
                                                                 "one".toCharArray(),
                                                                 "two".toCharArray(),
+                                                                "poo".toCharArray(),
                                                                 "three".toCharArray()
                                                             },
                                                             new int[] {
                                                                 180, 100, 253, 200, 120, 140, 100,
-                                                                80, 60
+                                                                80, 40, 60
                                                             });
                                             return null;
                                         })
@@ -687,8 +688,11 @@ public class TestableAnySoftKeyboard extends SoftKeyboard {
 
         @Override
         public void setCorrectionMode(
-                boolean enabledSuggestions, int maxLengthDiff, int maxDistance) {
-            mDelegate.setCorrectionMode(enabledSuggestions, maxLengthDiff, maxDistance);
+                boolean enabledSuggestions,
+                int maxLengthDiff,
+                int maxDistance,
+                boolean splitWords) {
+            mDelegate.setCorrectionMode(enabledSuggestions, maxLengthDiff, maxDistance, splitWords);
         }
 
         @Override

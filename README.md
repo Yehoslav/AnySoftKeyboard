@@ -1,6 +1,7 @@
 AnySoftKeyboard&nbsp;[![Latest release](https://img.shields.io/github/release/AnySoftKeyboard/AnySoftKeyboard.svg)](https://github.com/AnySoftKeyboard/AnySoftKeyboard/releases)
 ====================
 Discussions can be found on&nbsp;[💬&nbsp;GitHub](https://github.com/AnySoftKeyboard/AnySoftKeyboard/discussions)<br/>
+Follow us on <a rel="me" href="https://hachyderm.io/@anysoftkeyboard">Mastodon</a><br/>
 Support chat-channels can be found on&nbsp;[![Gitter chat](https://badges.gitter.im/AnySoftKeyboard/gitter.png)](https://gitter.im/AnySoftKeyboard)<br/>
 <br/>
 `main` latest build&nbsp;![](https://github.com/AnySoftKeyboard/AnySoftKeyboard/workflows/checks/badge.svg?event=push&branch=main)<br/>
@@ -69,6 +70,7 @@ Sign up to beta-channel [here](https://play.google.com/apps/testing/com.menny.an
 
 # Development/Contributing
 Want to develop a new feature, fix a bug, or add new language-pack? Read more [here](CONTRIBUTING.md).
+Contributors should adhere to the (Code-of-Conduct)[CODE_OF_CONDUCT.md] document.
 
 ## Copyright requirement
 *Remember:* the components in this repository are released under the Apache2 license. By contributing to this repository you give all copyright and distribution rights to the [AnySoftKeyboard maintainer](https://github.com/menny).
